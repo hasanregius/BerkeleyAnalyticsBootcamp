@@ -1,0 +1,41 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww14200\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Sub sumtot()\
+    Dim nrow As Long\
+    Dim ticker_name As String\
+    Dim ticker_total As Double\
+    Dim Summary_Table_Row As Integer\
+    Dim ticker_column As Integer\
+    Dim LastRow As Integer\
+    Dim lastrowTotal As Integer\
+    Summary_Table_Row = 2\
+    Sheets.Add.Name = "Total"\
+    Set combined_sheet = Worksheets("Total")\
+    ticker_column = 7\
+    For Each ws In Worksheets\
+        nrow = ws.Cells(Rows.Count, 1).End(xlUp).Row\
+        For i = 2 To nrow\
+                If Cells(i + 1, ticker_column).Value <> Cells(i, ticker_column).Value Then\
+                    ticker_name = Cells(i, 1).Value\
+                    ticker_total = ticker_total + Cells(i, 7).Value\
+                    Range("I" & Summary_Table_Row).Value = ticker_name\
+                    Range("J" & Summary_Table_Row).Value = ticker_total\
+                    Summary_Table_Row = Summary_Table_Row + 1\
+                    ticker_total = 0\
+                Else\
+                    ticker_total = ticker_total + Cells(i, 7).Value\
+                End If\
+            Next i\
+            LastRow = combined_sheet.Cells(Rows.Count, "A").End(xlUp).Row + 1\
+            lastrowTotal = ws.Cells(Rows.Count, "I").End(xlUp).Row - 1\
+            combined_sheet.Range("A2:B" & ((lastrowTotal - 1) + LastRow)).Value = ws.Range(("I2:J" & ((lastrowTotal + 1))))\
+    Next ws\
+    combined_sheet.Cells(1, 9).Value = "Ticker"\
+    combined_sheet.Cells(1, 10).Value = "Total"\
+    Sheets("Total").Move Before:=Sheets(1)\
+End Sub}
